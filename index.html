@@ -57,6 +57,8 @@ textarea:focus{outline:none;border-color:#2d7a4f;box-shadow:0 0 0 2px rgba(45,12
 .btn-primary:hover{background:#256640}
 .btn-secondary{background:#fff;color:#2d7a4f;border:1px solid #2d7a4f;border-radius:8px;padding:11px 20px;font-size:15px;font-weight:500;cursor:pointer;width:100%}
 .btn-danger{background:#fff;color:#c0392b;border:1px solid #c0392b;border-radius:8px;padding:11px 20px;font-size:15px;font-weight:500;cursor:pointer;width:100%}
+.btn-share{background:#fff;color:#2d7a4f;border:1.5px solid #2d7a4f;border-radius:8px;padding:11px 20px;font-size:15px;font-weight:500;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-share:hover{background:#f0faf4}
 .success-icon{width:64px;height:64px;background:rgba(45,122,79,0.12);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:16px auto 0;font-size:32px;color:#2d7a4f}
 .success-title{font-size:18px;font-weight:500;text-align:center}
 .success-sub{font-size:14px;color:#555;text-align:center;line-height:1.6}
@@ -79,6 +81,14 @@ textarea:focus{outline:none;border-color:#2d7a4f;box-shadow:0 0 0 2px rgba(45,12
 .review-sub-label{font-size:11px;font-weight:500;color:#666;margin-top:6px;margin-bottom:2px}
 .ideal-box{background:rgba(45,122,79,0.08);border:1.5px solid #b8d6c2;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
 .ideal-box-title{font-size:14px;font-weight:500;color:#1a5c35}
+
+/* ── 学習・情報提供リンクセクション ── */
+.info-section{background:#fff;border:1.5px solid #b8d6c2;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.info-section-title{font-size:13px;font-weight:600;color:#2d7a4f;display:flex;align-items:center;gap:6px}
+.info-link{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #c8dace;border-radius:8px;text-decoration:none;color:#1a1a1a;font-size:14px;font-weight:500;transition:background 0.15s}
+.info-link:hover{background:#f5faf6}
+.info-link-icon{font-size:20px;color:#2d7a4f;flex-shrink:0}
+.info-link-arrow{font-size:16px;color:#aaa;margin-left:auto}
 </style>
 </head>
 <body>
@@ -92,19 +102,21 @@ textarea:focus{outline:none;border-color:#2d7a4f;box-shadow:0 0 0 2px rgba(45,12
     </div>
   </div>
 
+  <!-- AS-IFセットアップ画面 -->
   <div class="screen" id="screen-asif-setup">
     <div class="asif-setup-icon"><i class="ti ti-stars"></i></div>
     <div class="asif-setup-title">あなたの「達成したら、めちゃくちゃ嬉しい目標」を教えてください。</div>
     <div class="asif-setup-desc">「もし、すでに達成しているとしたら？」とイメージしながら、目標と感情を言葉にしましょう。</div>
     <div class="asif-example">例：8月のリーグ戦優勝！めちゃくちゃ嬉しい！</div>
     <div>
-      <div class="input-label">目標 ＋ その時感じる強い感情</div>
-      <textarea id="asifInput" rows="3" placeholder="例：8月のリーグ戦優勝！めちゃくちゃ嬉しい！"></textarea>
+      <div class="input-label">もし目標を達成したら？＋どんないい気持ちがする？</div>
+      <textarea id="asifInput" rows="3"></textarea>
       <div style="font-size:12px;color:#888;margin-top:6px;line-height:1.5">後からいつでも編集できます。</div>
     </div>
     <button class="btn-primary" onclick="saveAsif()">設定してはじめる</button>
   </div>
 
+  <!-- ホーム画面 -->
   <div class="screen" id="screen-home">
     <div class="asif-banner" onclick="showScreen('asif-edit')">
       <div class="asif-banner-icon"><i class="ti ti-flame"></i></div>
@@ -136,18 +148,46 @@ textarea:focus{outline:none;border-color:#2d7a4f;box-shadow:0 0 0 2px rgba(45,12
         <div class="desc">どれだけ成長したかを振り返る</div>
       </div>
     </div>
+
+    <!-- ── 学習とお役立ちインフォメーション ──
+         URLを変更する場合は各 href="..." の部分を書き換えてください -->
+    <div class="info-section">
+      <div class="info-section-title">
+        <i class="ti ti-book-2"></i>学習とお役立ちインフォメーション
+      </div>
+      <!-- リンク①：今月のメンタルトレーニング（note等）→ hrefを差し替えてください -->
+      <a class="info-link" href="#" target="_blank">
+        <span class="info-link-icon"><i class="ti ti-brain"></i></span>
+        今月のメンタルトレーニング
+        <span class="info-link-arrow"><i class="ti ti-external-link"></i></span>
+      </a>
+      <!-- リンク②：セルフコーチング（Instagram等）→ hrefを差し替えてください -->
+      <a class="info-link" href="#" target="_blank">
+        <span class="info-link-icon"><i class="ti ti-brand-instagram"></i></span>
+        セルフコーチング
+        <span class="info-link-arrow"><i class="ti ti-external-link"></i></span>
+      </a>
+      <!-- リンク③：監督からのメッセージ（Google Docs等）→ hrefを差し替えてください -->
+      <a class="info-link" href="#" target="_blank">
+        <span class="info-link-icon"><i class="ti ti-message-circle"></i></span>
+        監督からのメッセージ
+        <span class="info-link-arrow"><i class="ti ti-external-link"></i></span>
+      </a>
+    </div>
   </div>
 
+  <!-- 目標編集画面 -->
   <div class="screen" id="screen-asif-edit">
     <div style="font-size:14px;color:#555;line-height:1.6">「もし、すでに達成しているとしたら？」とイメージしながら、目標や気持ちが変わったら更新しましょう。</div>
     <div class="asif-example">例：8月のリーグ戦優勝！めちゃくちゃ嬉しい！</div>
     <div>
-      <div class="input-label">目標 ＋ その時感じる強い感情</div>
-      <textarea id="asifEditInput" rows="3" placeholder="例：8月のリーグ戦優勝！めちゃくちゃ嬉しい！"></textarea>
+      <div class="input-label">もし目標を達成したら？＋どんないい気持ちがする？</div>
+      <textarea id="asifEditInput" rows="3"></textarea>
     </div>
     <button class="btn-primary" onclick="updateAsif()">更新する</button>
   </div>
 
+  <!-- フォーム画面 -->
   <div class="screen" id="screen-form" style="padding-top:12px">
     <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
     <div class="step-label" id="stepLabel"></div>
@@ -160,6 +200,7 @@ textarea:focus{outline:none;border-color:#2d7a4f;box-shadow:0 0 0 2px rgba(45,12
     </div>
   </div>
 
+  <!-- 確認・編集画面（SCOREのみ） -->
   <div class="screen" id="screen-review" style="padding-top:4px">
     <div style="font-size:13px;color:#555;line-height:1.6;padding:4px 0 8px">回答を確認し、必要なところを編集してください。最後に「最初の一歩」を記入して保存します。</div>
     <div id="reviewBlocks"></div>
@@ -173,21 +214,32 @@ textarea:focus{outline:none;border-color:#2d7a4f;box-shadow:0 0 0 2px rgba(45,12
     <button class="btn-primary" onclick="saveFromReview()">保存する</button>
   </div>
 
+  <!-- 完了画面 -->
   <div class="screen" id="screen-success">
     <div class="success-icon"><i class="ti ti-check"></i></div>
     <div class="success-title" id="successTitle">記録しました</div>
     <div class="success-sub" id="successSub"></div>
+    <!-- シェアボタン（完了画面） -->
+    <button class="btn-share" id="successShareBtn" onclick="shareLastRecord()">
+      <i class="ti ti-share"></i>この記録をシェアする
+    </button>
     <button class="btn-primary" onclick="showScreen('home')">ホームに戻る</button>
     <button class="btn-secondary" style="margin-top:4px" onclick="showScreen('growth')">成長記録を見る</button>
   </div>
 
+  <!-- 成長記録画面 -->
   <div class="screen" id="screen-growth">
     <div class="section-title">成長記録</div>
     <div id="growthList"></div>
   </div>
 
+  <!-- 記録詳細画面 -->
   <div class="screen" id="screen-detail">
     <div id="detailContent"></div>
+    <!-- シェアボタン（詳細画面） -->
+    <button class="btn-share" onclick="shareCurrentRecord()">
+      <i class="ti ti-share"></i>この記録をシェアする
+    </button>
     <div class="delete-confirm" id="deleteConfirm">
       <div class="delete-confirm-msg">この記録を削除しますか？<br>削除後は元に戻せません。</div>
       <div class="delete-confirm-btns">
@@ -236,7 +288,7 @@ const formMeta={
 };
 
 let curScreen='',curForm='',curStep=0,curData={};
-let navStack=[],viewingId=null,editId=null;
+let navStack=[],viewingId=null,editId=null,lastSavedId=null;
 
 function init(){
   const asif=localStorage.getItem('shida_asif');
@@ -373,9 +425,16 @@ function saveRecord(){
   const meta=formMeta[curForm],title=curData[meta.titleKey]||'無題';
   const recs=JSON.parse(localStorage.getItem('shida_records')||'[]');
   const isEdit=!!editId;
-  if(isEdit){const i=recs.findIndex(r=>r.id===editId);if(i>=0)recs[i]={...recs[i],title:title.slice(0,40),data:{...curData}};}
-  else{recs.unshift({id:Date.now(),type:curForm,typeName:meta.name,title:title.slice(0,40),data:{...curData},date:new Date().toLocaleDateString('ja-JP')});}
+  let savedId;
+  if(isEdit){
+    const i=recs.findIndex(r=>r.id===editId);
+    if(i>=0){recs[i]={...recs[i],title:title.slice(0,40),data:{...curData}};savedId=editId;}
+  }else{
+    savedId=Date.now();
+    recs.unshift({id:savedId,type:curForm,typeName:meta.name,title:title.slice(0,40),data:{...curData},date:new Date().toLocaleDateString('ja-JP')});
+  }
   localStorage.setItem('shida_records',JSON.stringify(recs));
+  lastSavedId=savedId;
   editId=null;navStack=[];
   document.getElementById('successTitle').textContent=isEdit?'更新しました':'記録しました';
   document.getElementById('successSub').textContent=`「${title.slice(0,40)}」を${isEdit?'更新':'記録'}しました。`;
@@ -410,6 +469,59 @@ function editRecord(){
   const recs=JSON.parse(localStorage.getItem('shida_records')||'[]');
   const rec=recs.find(r=>r.id===viewingId);if(!rec)return;
   startForm(rec.type,rec.data,rec.id);
+}
+
+/* ── シェア機能 ── */
+
+// 記録IDからシェア用テキストを生成する
+function buildShareText(id){
+  const recs=JSON.parse(localStorage.getItem('shida_records')||'[]');
+  const rec=recs.find(r=>r.id===id);
+  if(!rec)return '';
+  const steps=formMeta[rec.type].steps;
+  const inputSteps=steps.filter(s=>s.type!=='info');
+  let lines=[`【${rec.typeName}】${rec.date}`,`テーマ：${rec.title}`,''];
+  inputSteps.forEach((s,i)=>{
+    const idx=steps.indexOf(s);
+    let ans=rec.data['q'+idx]||'—';
+    if(s.type==='text2'){
+      const p=ans.split(' ||| ');
+      lines.push(`■ ${s.q}`);
+      lines.push(`  ${s.labels[0]}：${p[0]||'—'}`);
+      lines.push(`  ${s.labels[1]}：${p[1]||'—'}`);
+    }else{
+      lines.push(`■ ${s.q}`);
+      lines.push(`  ${ans}`);
+    }
+    lines.push('');
+  });
+  if(rec.data.firstStep){lines.push(`■ 最初の一歩`);lines.push(`  ${rec.data.firstStep}`);}
+  return lines.join('\n');
+}
+
+// Web Share API → 非対応端末はmailtoにフォールバック
+function doShare(text,title){
+  if(navigator.share){
+    navigator.share({title:title,text:text}).catch(()=>{});
+  }else{
+    const subject=encodeURIComponent(title);
+    const body=encodeURIComponent(text);
+    window.location.href=`mailto:?subject=${subject}&body=${body}`;
+  }
+}
+
+// 完了画面から（最後に保存した記録）
+function shareLastRecord(){
+  if(!lastSavedId)return;
+  const text=buildShareText(lastSavedId);
+  doShare(text,'ワーク記録のご報告');
+}
+
+// 詳細画面から（現在表示中の記録）
+function shareCurrentRecord(){
+  if(!viewingId)return;
+  const text=buildShareText(viewingId);
+  doShare(text,'ワーク記録のご報告');
 }
 
 init();
