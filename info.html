@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>学習とお役立ちインフォメーション</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#eef4f0;color:#1a1a1a}
+#app{max-width:420px;margin:0 auto;min-height:100vh;background:#eef4f0;display:flex;flex-direction:column}
+
+.header{background:#2d7a4f;color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10}
+.header h1{font-size:17px;font-weight:500;flex:1}
+.back-btn{background:none;border:none;color:#fff;cursor:pointer;font-size:22px;padding:4px;line-height:1;display:flex;align-items:center;text-decoration:none}
+
+.content{flex:1;padding:16px;display:flex;flex-direction:column;gap:16px}
+
+.section-card{background:#fff;border:1.5px solid #b8d6c2;border-radius:12px;overflow:hidden}
+.section-header{background:#2d7a4f;padding:14px 16px;display:flex;align-items:center;gap:10px}
+.section-header-icon{font-size:22px;color:#a8e6c1}
+.section-header-title{font-size:15px;font-weight:600;color:#fff}
+.section-body{padding:16px;display:flex;flex-direction:column;gap:10px}
+.section-label{font-size:11px;font-weight:600;color:#2d7a4f;text-transform:uppercase;letter-spacing:0.05em}
+.section-text{font-size:14px;line-height:1.8;color:#333}
+.section-highlight{background:rgba(45,122,79,0.08);border-left:3px solid #2d7a4f;border-radius:0 8px 8px 0;padding:10px 14px;font-size:14px;color:#1a5c35;line-height:1.7}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.tag{background:rgba(45,122,79,0.1);color:#2d7a4f;border-radius:20px;padding:4px 10px;font-size:12px;font-weight:500}
+.divider{height:1px;background:#eef4f0;margin:4px 0}
+
+.footer{padding:16px;padding-bottom:24px}
+.btn-back{display:flex;align-items:center;justify-content:center;gap:8px;background:#2d7a4f;color:#fff;border:none;border-radius:8px;padding:13px 20px;font-size:15px;font-weight:500;cursor:pointer;width:100%;text-decoration:none}
+.btn-back:hover{background:#256640}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="header">
+    <a class="back-btn" href="index.html"><i class="ti ti-arrow-left"></i></a>
+    <h1>学習とお役立ちインフォメーション</h1>
+  </div>
+
+  <div class="content">
+
+    <!-- ① 今月のメンタルトレーニング -->
+    <div class="section-card">
+      <div class="section-header">
+        <span class="section-header-icon"><i class="ti ti-brain"></i></span>
+        <span class="section-header-title">今月のメンタルトレーニング</span>
+      </div>
+      <div class="section-body">
+        <div class="section-label">今月のテーマ</div>
+        <div class="section-highlight">「セルフトーク」を整えて、本番でのパフォーマンスを最大化する</div>
+        <div class="section-text">
+          試合中・練習中、あなたは自分自身にどんな言葉をかけていますか？<br><br>
+          ネガティブなセルフトークは、集中力を奪い、身体の動きを硬くします。一方で、ポジティブで具体的なセルフトークは、パフォーマンスを高め、プレッシャーの場面でも力を発揮できるようにします。
+        </div>
+        <div class="divider"></div>
+        <div class="section-label">今月の実践ワーク</div>
+        <div class="section-text">
+          ① 練習後に「自分にかけた言葉」を3つ振り返る<br>
+          ② ネガティブな言葉を一つ選び、ポジティブな言葉に言い換える<br>
+          ③ 本番前に使う「合言葉」を一つ決める
+        </div>
+        <div class="tag-row">
+          <span class="tag">セルフトーク</span>
+          <span class="tag">集中力</span>
+          <span class="tag">本番対策</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ② セルフコーチング -->
+    <div class="section-card">
+      <div class="section-header">
+        <span class="section-header-icon"><i class="ti ti-brand-instagram"></i></span>
+        <span class="section-header-title">セルフコーチング</span>
+      </div>
+      <div class="section-body">
+        <div class="section-label">NLPコーチングとは</div>
+        <div class="section-text">
+          NLP（神経言語プログラミング）とは、思考・言語・行動のパターンを理解し、望む変化を生み出すためのアプローチです。<br><br>
+          セルフコーチングとは、コーチなしでも自分自身に問いかけ、気づきと行動を引き出すスキルです。このアプリのワーク（目標設定・問題解決・振り返り）はすべてこの考え方に基づいています。
+        </div>
+        <div class="section-highlight">
+          「答えは、いつも自分の中にある。」<br>
+          コーチングとは、その答えを引き出す問いかけのプロセスです。
+        </div>
+        <div class="divider"></div>
+        <div class="section-label">セルフコーチングの基本ステップ</div>
+        <div class="section-text">
+          ① 現状を正直に見る（What is）<br>
+          ② 理想の状態を描く（What if）<br>
+          ③ リソースを確認する（What have）<br>
+          ④ 最初の一歩を決める（What next）
+        </div>
+        <div class="tag-row">
+          <span class="tag">NLP</span>
+          <span class="tag">コーチング</span>
+          <span class="tag">自己成長</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ③ 監督からのメッセージ -->
+    <div class="section-card">
+      <div class="section-header">
+        <span class="section-header-icon"><i class="ti ti-message-circle"></i></span>
+        <span class="section-header-title">監督からのメッセージ</span>
+      </div>
+      <div class="section-body">
+        <div class="section-label">今月のメッセージ</div>
+        <div class="section-highlight">
+          「努力は裏切らない。でも、方向性の間違った努力は遠回りになる。だから、考えながら動け。」
+        </div>
+        <div class="section-text">
+          毎日の練習に一生懸命取り組んでいることは、よく分かっています。<br><br>
+          このアプリは、みなさんが「なんとなく頑張る」ではなく、「目的を持って動ける」選手になるためのツールです。ワークを活用して、自分の思考を整理する習慣をつけてください。<br><br>
+          困ったことや相談があれば、いつでも声をかけてください。一緒に考えましょう。
+        </div>
+        <div class="divider"></div>
+        <div class="section-label">今月の目標（チーム共通）</div>
+        <div class="section-text">
+          ① 毎週1回、いずれかのワークを実施する<br>
+          ② 記録を監督にシェアする（任意）<br>
+          ③ 振り返りを次の練習に活かす
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <a class="btn-back" href="index.html">
+      <i class="ti ti-arrow-left"></i>アプリに戻る
+    </a>
+  </div>
+
+</div>
+</body>
+</html>
