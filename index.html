@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>目標設定・問題解決アプリ</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#eef4f0;color:#1a1a1a}
+#app{max-width:420px;margin:0 auto;min-height:100vh;background:#eef4f0;display:flex;flex-direction:column}
+.header{background:#2d7a4f;color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10}
+.header h1{font-size:17px;font-weight:500;flex:1}
+.back-btn{background:none;border:none;color:#fff;cursor:pointer;font-size:22px;padding:4px;line-height:1;display:flex;align-items:center}
+.hdr-btn{background:none;border:none;color:#fff;cursor:pointer;font-size:20px;padding:6px;line-height:1;display:flex;align-items:center;border-radius:6px}
+.hdr-btn:hover{background:rgba(255,255,255,0.15)}
+.header-actions{display:flex;gap:4px}
+.screen{flex:1;padding:16px;display:none;flex-direction:column;gap:12px}
+.screen.active{display:flex}
+.asif-banner{background:#2d7a4f;border-radius:12px;padding:14px 16px;display:flex;align-items:flex-start;gap:10px;cursor:pointer}
+.asif-banner-icon{font-size:22px;color:#a8e6c1;flex-shrink:0;margin-top:1px}
+.asif-banner-body{flex:1}
+.asif-banner-label{font-size:11px;color:#a8e6c1;font-weight:500;margin-bottom:3px}
+.asif-banner-text{font-size:15px;color:#fff;font-weight:500;line-height:1.5}
+.asif-banner-edit{font-size:18px;color:#a8e6c1;flex-shrink:0;margin-top:2px}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.menu-card{background:#fff;border-radius:12px;padding:16px 14px;cursor:pointer;text-align:left;transition:background 0.15s;border:1.5px solid #b8d6c2}
+.menu-card:hover{background:#f5faf6}
+.menu-card .icon{font-size:28px;color:#2d7a4f;margin-bottom:8px}
+.menu-card .label{font-size:14px;font-weight:500;color:#1a1a1a}
+.menu-card .desc{font-size:12px;color:#888;margin-top:4px;line-height:1.4}
+.asif-setup-icon{font-size:40px;color:#2d7a4f;text-align:center;margin:8px 0}
+.asif-setup-title{font-size:18px;font-weight:500;text-align:center;line-height:1.4}
+.asif-setup-desc{font-size:14px;color:#555;line-height:1.7;text-align:center}
+.asif-example{background:rgba(45,122,79,0.1);border-left:3px solid #2d7a4f;border-radius:0 8px 8px 0;padding:10px 14px;font-size:14px;color:#1a5c35;line-height:1.6}
+.section-title{font-size:16px;font-weight:500}
+.progress-bar{height:4px;background:rgba(0,0,0,0.1);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:#2d7a4f;border-radius:2px;transition:width 0.3s}
+.step-label{font-size:12px;color:#666}
+.step-q{font-size:17px;font-weight:500;line-height:1.4;margin:4px 0 2px}
+.step-subq{font-size:14px;color:#555;line-height:1.6;margin-bottom:8px;white-space:pre-line}
+textarea{width:100%;border:1px solid #c8dace;border-radius:8px;padding:10px 12px;font-size:14px;font-family:inherit;color:#1a1a1a;background:#fff;line-height:1.6;resize:none}
+textarea:focus{outline:none;border-color:#2d7a4f;box-shadow:0 0 0 2px rgba(45,122,79,0.15)}
+.input-label{font-size:12px;font-weight:500;color:#666;margin-bottom:4px;margin-top:10px}
+.input-label:first-child{margin-top:0}
+.radio-group{display:flex;flex-direction:column;gap:8px}
+.radio-opt{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #c8dace;border-radius:8px;cursor:pointer;transition:background 0.1s;background:#fff}
+.radio-opt:hover{background:#f5faf6}
+.radio-opt.selected{border-color:#2d7a4f;background:rgba(45,122,79,0.06)}
+.radio-opt input{accent-color:#2d7a4f;width:16px;height:16px}
+.radio-opt span{font-size:14px}
+.info-box{background:rgba(45,122,79,0.08);border-left:3px solid #2d7a4f;border-radius:0 8px 8px 0;padding:14px;font-size:14px;line-height:1.8;white-space:pre-line}
+.tip-box{background:rgba(0,0,0,0.05);border-radius:8px;padding:10px 12px;font-size:13px;color:#555;line-height:1.6;white-space:pre-line;margin-top:8px}
+.form-nav{display:grid;gap:8px;margin-top:auto}
+.form-nav.has-prev{grid-template-columns:1fr 2fr}
+.btn-primary{background:#2d7a4f;color:#fff;border:none;border-radius:8px;padding:12px 20px;font-size:15px;font-weight:500;cursor:pointer;width:100%}
+.btn-primary:hover{background:#256640}
+.btn-secondary{background:#fff;color:#2d7a4f;border:1px solid #2d7a4f;border-radius:8px;padding:11px 20px;font-size:15px;font-weight:500;cursor:pointer;width:100%}
+.btn-danger{background:#fff;color:#c0392b;border:1px solid #c0392b;border-radius:8px;padding:11px 20px;font-size:15px;font-weight:500;cursor:pointer;width:100%}
+.success-icon{width:64px;height:64px;background:rgba(45,122,79,0.12);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:16px auto 0;font-size:32px;color:#2d7a4f}
+.success-title{font-size:18px;font-weight:500;text-align:center}
+.success-sub{font-size:14px;color:#555;text-align:center;line-height:1.6}
+.growth-item{background:#fff;border:1.5px solid #b8d6c2;border-radius:12px;padding:14px;cursor:pointer;margin-bottom:8px}
+.growth-item:hover{background:#f5faf6}
+.growth-item-type{font-size:11px;color:#2d7a4f;font-weight:500;margin-bottom:4px}
+.growth-item-title{font-size:14px;font-weight:500}
+.growth-item-date{font-size:12px;color:#888;margin-top:2px}
+.detail-section{background:#fff;border-radius:8px;padding:12px;border:1.5px solid #b8d6c2}
+.detail-q{font-size:12px;color:#888;margin-bottom:3px}
+.detail-a{font-size:14px;line-height:1.5;margin-bottom:10px;white-space:pre-line}
+.empty{text-align:center;padding:40px 0;color:#888;font-size:14px}
+.delete-confirm{background:#fff;border:1.5px solid #b8d6c2;border-radius:12px;padding:16px;display:none;flex-direction:column;gap:10px}
+.delete-confirm.show{display:flex}
+.delete-confirm-msg{font-size:14px;text-align:center;line-height:1.5}
+.delete-confirm-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.review-block{background:#fff;border:1.5px solid #b8d6c2;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.review-block-label{font-size:13px;font-weight:500;color:#2d7a4f}
+.review-block-subq{font-size:12px;color:#666;line-height:1.5;white-space:pre-line}
+.review-sub-label{font-size:11px;font-weight:500;color:#666;margin-top:6px;margin-bottom:2px}
+.ideal-box{background:rgba(45,122,79,0.08);border:1.5px solid #b8d6c2;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.ideal-box-title{font-size:14px;font-weight:500;color:#1a5c35}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="header">
+    <button class="back-btn" id="backBtn" style="display:none"><i class="ti ti-arrow-left"></i></button>
+    <h1 id="headerTitle">目標設定・問題解決アプリ</h1>
+    <div class="header-actions" id="detailActions" style="display:none">
+      <button class="hdr-btn" onclick="editRecord()"><i class="ti ti-edit"></i></button>
+      <button class="hdr-btn" onclick="toggleDeleteConfirm()"><i class="ti ti-trash"></i></button>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-asif-setup">
+    <div class="asif-setup-icon"><i class="ti ti-stars"></i></div>
+    <div class="asif-setup-title">あなたの「達成したら、めちゃくちゃ嬉しい目標」を教えてください。</div>
+    <div class="asif-setup-desc">「もし、すでに達成しているとしたら？」とイメージしながら、目標と感情を言葉にしましょう。</div>
+    <div class="asif-example">例：8月のリーグ戦優勝！めちゃくちゃ嬉しい！</div>
+    <div>
+      <div class="input-label">目標 ＋ その時感じる強い感情</div>
+      <textarea id="asifInput" rows="3" placeholder="例：8月のリーグ戦優勝！めちゃくちゃ嬉しい！"></textarea>
+      <div style="font-size:12px;color:#888;margin-top:6px;line-height:1.5">後からいつでも編集できます。</div>
+    </div>
+    <button class="btn-primary" onclick="saveAsif()">設定してはじめる</button>
+  </div>
+
+  <div class="screen" id="screen-home">
+    <div class="asif-banner" onclick="showScreen('asif-edit')">
+      <div class="asif-banner-icon"><i class="ti ti-flame"></i></div>
+      <div class="asif-banner-body">
+        <div class="asif-banner-label">わたしの目標</div>
+        <div class="asif-banner-text" id="asifBannerText"></div>
+      </div>
+      <div class="asif-banner-edit"><i class="ti ti-pencil"></i></div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-card" onclick="startForm('wfo')">
+        <div class="icon"><i class="ti ti-target"></i></div>
+        <div class="label">目標設定</div>
+        <div class="desc">色んな角度で目標のフォームを調整し、わくわくする目標にする</div>
+      </div>
+      <div class="menu-card" onclick="startForm('score')">
+        <div class="icon"><i class="ti ti-puzzle"></i></div>
+        <div class="label">問題解決ワーク</div>
+        <div class="desc">壁に当たったら、即実践！課題と思考を整理する</div>
+      </div>
+      <div class="menu-card" onclick="startForm('reflect')">
+        <div class="icon"><i class="ti ti-refresh"></i></div>
+        <div class="label">振り返り</div>
+        <div class="desc">７つの視点で経験を未来へのリソースに変える</div>
+      </div>
+      <div class="menu-card" onclick="showScreen('growth')">
+        <div class="icon"><i class="ti ti-chart-line"></i></div>
+        <div class="label">成長記録</div>
+        <div class="desc">どれだけ成長したかを振り返る</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-asif-edit">
+    <div style="font-size:14px;color:#555;line-height:1.6">「もし、すでに達成しているとしたら？」とイメージしながら、目標や気持ちが変わったら更新しましょう。</div>
+    <div class="asif-example">例：8月のリーグ戦優勝！めちゃくちゃ嬉しい！</div>
+    <div>
+      <div class="input-label">目標 ＋ その時感じる強い感情</div>
+      <textarea id="asifEditInput" rows="3" placeholder="例：8月のリーグ戦優勝！めちゃくちゃ嬉しい！"></textarea>
+    </div>
+    <button class="btn-primary" onclick="updateAsif()">更新する</button>
+  </div>
+
+  <div class="screen" id="screen-form" style="padding-top:12px">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="step-label" id="stepLabel"></div>
+    <div class="step-q" id="stepQ"></div>
+    <div class="step-subq" id="stepSubQ"></div>
+    <div id="stepInput"></div>
+    <div class="form-nav" id="formNav">
+      <button class="btn-secondary" id="prevBtn" onclick="prevStep()" style="display:none">前へ</button>
+      <button class="btn-primary" id="nextBtn" onclick="nextStep()">次へ</button>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-review" style="padding-top:4px">
+    <div style="font-size:13px;color:#555;line-height:1.6;padding:4px 0 8px">回答を確認し、必要なところを編集してください。最後に「最初の一歩」を記入して保存します。</div>
+    <div id="reviewBlocks"></div>
+    <div class="ideal-box">
+      <div class="ideal-box-title"><i class="ti ti-star" style="font-size:15px;vertical-align:-2px;margin-right:4px"></i>理想の状態を確認する</div>
+      <div style="font-size:12px;color:#1a5c35;line-height:1.6">Q3で書いた「理想の状態」です。これを目指して進みましょう。</div>
+      <div style="font-size:14px;background:#fff;border-radius:8px;padding:10px;line-height:1.6" id="idealDisplay"></div>
+      <div style="font-size:13px;font-weight:500;color:#1a5c35;margin-top:4px">最初の一歩として、今日できることは何ですか？</div>
+      <textarea rows="3" id="firstStepTa" placeholder="小さくても具体的な行動を書きましょう。"></textarea>
+    </div>
+    <button class="btn-primary" onclick="saveFromReview()">保存する</button>
+  </div>
+
+  <div class="screen" id="screen-success">
+    <div class="success-icon"><i class="ti ti-check"></i></div>
+    <div class="success-title" id="successTitle">記録しました</div>
+    <div class="success-sub" id="successSub"></div>
+    <button class="btn-primary" onclick="showScreen('home')">ホームに戻る</button>
+    <button class="btn-secondary" style="margin-top:4px" onclick="showScreen('growth')">成長記録を見る</button>
+  </div>
+
+  <div class="screen" id="screen-growth">
+    <div class="section-title">成長記録</div>
+    <div id="growthList"></div>
+  </div>
+
+  <div class="screen" id="screen-detail">
+    <div id="detailContent"></div>
+    <div class="delete-confirm" id="deleteConfirm">
+      <div class="delete-confirm-msg">この記録を削除しますか？<br>削除後は元に戻せません。</div>
+      <div class="delete-confirm-btns">
+        <button class="btn-secondary" onclick="toggleDeleteConfirm()">キャンセル</button>
+        <button class="btn-danger" onclick="confirmDelete()">削除する</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const wfoSteps=[
+  {q:'セットアップ',subq:'',type:'info',info:'少し深呼吸をしてみましょう。\nあなたは、今、どんな気持ちでしょうか。\n\n今の状態が確認できたら、目標設定へいきましょう。\n直感的に、ふと思い浮かんだものを、短いキーワードなどで言葉にしてみましょう。'},
+  {q:'あなたが手に入れたい結果はなんですか？',subq:'ふと浮かぶものを、肯定的な形で。',type:'text'},
+  {q:'そのために、あなたは何をしますか？または、何ができますか？',subq:'自分でやること、できること。',type:'text'},
+  {q:'手に入れたい結果は、具体的にはどういう結果でしょうか？',subq:'いつ、どこで、何を、誰と、どのようにしている',type:'text'},
+  {q:'その結果が手に入った時、どのようにして分かりますか？',subq:'何が、見えますか？\n何が、聞こえますか？\n身体のどこに、どんな感覚を感じていますか？',type:'text'},
+  {q:'そのことによって、あなたの選択肢や可能性の幅は拡がりますか？',subq:'「いいえ」の時は、Q1に戻って、可能性が拡がるように再設定しましょう。',type:'radio',opts:['はい','いいえ']},
+  {q:'結果を手に入れるために役に立つ、どんなリソースがありますか？',subq:'リソース：できるだけ楽に、効率的に結果に至るために役立つもの全て',type:'text2',labels:['既に持っているリソース','これから手に入れる必要のあるリソース']},
+  {q:'やりたいという気持ちは、充分ですか？',subq:'はい → 最初の一歩としてできることを書いてください\nいいえ → 止めているものと、その解決の最初の一歩を書いてください',type:'text'},
+  {q:'結果を手に入れた時に、自分自身と身の周りに何か不都合な影響が起こることはありませんか？',subq:'もしあるなら、Q1に戻って、不都合のない形に再設定しましょう。',type:'text'},
+  {q:'それを手にいれることで、あなたは何を得るのでしょうか？あなたには、どんないいことがありますか？',subq:'目標を越えた先にはどんな魅力的なものがある？',type:'text'},
+];
+const scoreSteps=[
+  {q:'セットアップ',subq:'',type:'info',info:'少し深呼吸をしてみましょう。\nあなたは、今、どんな気持ちでしょうか。\n\n今の状態が確認できたら、解決のための整理をしていきましょう。'},
+  {q:'現状',subq:'今、何が問題だと感じていますか？\n具体的にどんな状態に気づいていますか？',type:'text'},
+  {q:'原因',subq:'何が「現状」を作り出しているのでしょうか？\nその「現状」を引き起こし、継続させている、隠された要因やきっかけは何でしょうか？',type:'text'},
+  {q:'目標・理想の状態',subq:'「現状」に代わる、「理想の状態」は、具体的にはどのようなものでしょうか？\nこの問題が解決したら、具体的にどのようになりますか？',type:'text'},
+  {q:'リソース',subq:'「原因」や「現状」を変化させ、「理想の状態」へ進むために、どんなリソースを持っているでしょうか？\nあなたが活用できる知識、スキル、経験、人脈やサポートには、どんなものがありますか？',type:'text2',labels:['今持っているリソース','これからプラスする必要があるもの']},
+  {q:'結果の影響',subq:'このことが解決したら、あるいは解決に取り組む中で、あなたや周囲にどんな影響がありますか？',type:'text2',labels:['いい影響','歓迎できない影響']},
+];
+const reflectSteps=[
+  {q:'セットアップ',subq:'',type:'info',info:'私たちは、出来事を振り返ることで、意味を付けます。\nあなたの可能性と未来を拡げるために、体験をリソースとして振り返りましょう。'},
+  {q:'あなたが振り返ることで、リソースとしたいことは、何ですか？',subq:'振り返る出来事・テーマ',type:'text'},
+  {q:'この体験を振り返って、あなたが得た「発見」や「気づき」、「学び」のいくつかには、どのようなものがあるでしょうか？',subq:'もし、ぴったりの答えが浮かばないときには、「もし、そうだとしたら？」と仮で答えてみましょう。',type:'text'},
+  {q:'この経験を通して、あなたの中に広がった、これまでとは違う新しい「アイデア」や「可能性」、「選択肢」のいくつかには、どのようなものがあるでしょうか？',subq:'',type:'text'},
+  {q:'あなたが行った行動で、目的地にどれくらい近づいたでしょうか。',subq:'自分が試したことは、効果的だったか？',type:'text'},
+  {q:'この経験を、もう一度体験できるとしたら、さらに改善・発展させるために、何を調整し、付け加えたいでしょうか？',subq:'よりよくなるための、違いを創ろう',type:'text',tip:'その行動を、イメージの中で、実際にやってみましょう！\n身体を使って再現してみるのもおすすめです。'},
+  {q:'この経験を土台として、あなたが自分自身の可能性と未来を拡大するために実行できる、次の一歩のいくつかには、どのようなものがあるでしょうか？',subq:'',type:'text'},
+  {q:'これらのことは、この先の数日間、数週間、数ヶ月間、あなたとあなたの周りの人たちに、どのようにいい影響をもたらしてくれるでしょうか？',subq:'',type:'text'},
+];
+const formMeta={
+  wfo:{name:'目標設定',steps:wfoSteps,titleKey:'q1',review:false},
+  score:{name:'問題解決ワーク',steps:scoreSteps,titleKey:'q1',review:true},
+  reflect:{name:'振り返り',steps:reflectSteps,titleKey:'q1',review:false},
+};
+
+let curScreen='',curForm='',curStep=0,curData={};
+let navStack=[],viewingId=null,editId=null;
+
+function init(){
+  const asif=localStorage.getItem('shida_asif');
+  if(!asif){showScreen('asif-setup',false);}
+  else{document.getElementById('asifBannerText').textContent=asif;showScreen('home',false);}
+}
+
+function saveAsif(){
+  const val=document.getElementById('asifInput').value.trim();
+  if(!val)return;
+  localStorage.setItem('shida_asif',val);
+  document.getElementById('asifBannerText').textContent=val;
+  navStack=[];showScreen('home',false);
+}
+
+function updateAsif(){
+  const val=document.getElementById('asifEditInput').value.trim();
+  if(!val)return;
+  localStorage.setItem('shida_asif',val);
+  document.getElementById('asifBannerText').textContent=val;
+  navStack=[];showScreen('home',false);
+}
+
+function showScreen(id,push=true){
+  if(push&&curScreen&&curScreen!==id)navStack.push(curScreen);
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  curScreen=id;
+  const titles={'asif-setup':'目標設定・問題解決アプリ','asif-edit':'目標を編集',home:'目標設定・問題解決アプリ',form:'',review:'確認・編集',success:'完了',growth:'成長記録',detail:'記録詳細'};
+  document.getElementById('headerTitle').textContent=titles[id]||'';
+  document.getElementById('backBtn').style.display=(id==='home'||id==='asif-setup')?'none':'flex';
+  document.getElementById('detailActions').style.display=(id==='detail')?'flex':'none';
+  if(id==='growth')renderGrowth();
+  if(id==='asif-edit')document.getElementById('asifEditInput').value=localStorage.getItem('shida_asif')||'';
+  if(id!=='detail'){const dc=document.getElementById('deleteConfirm');if(dc)dc.classList.remove('show');}
+}
+
+document.getElementById('backBtn').onclick=()=>showScreen(navStack.pop()||'home',false);
+
+function toggleDeleteConfirm(){document.getElementById('deleteConfirm').classList.toggle('show');}
+function confirmDelete(){
+  const recs=JSON.parse(localStorage.getItem('shida_records')||'[]');
+  localStorage.setItem('shida_records',JSON.stringify(recs.filter(r=>r.id!==viewingId)));
+  viewingId=null;navStack=[];showScreen('growth',false);
+}
+
+function startForm(type,preData,existingId){
+  curForm=type;curStep=0;curData=preData?{...preData}:{};editId=existingId||null;
+  navStack.push(curScreen);showScreen('form',false);
+  document.getElementById('headerTitle').textContent=formMeta[type].name+(editId?' (編集)':'');
+  renderStep();
+}
+
+function renderStep(){
+  const steps=formMeta[curForm].steps,s=steps[curStep];
+  const inputSteps=steps.filter(x=>x.type!=='info');
+  const doneInput=steps.slice(0,curStep).filter(x=>x.type!=='info').length;
+  document.getElementById('progressFill').style.width=Math.round((doneInput/inputSteps.length)*100)+'%';
+  document.getElementById('stepLabel').textContent=s.type==='info'?'はじめに':`ステップ ${doneInput+1} / ${inputSteps.length}`;
+  document.getElementById('stepQ').textContent=s.q;
+  document.getElementById('stepSubQ').textContent=s.subq||'';
+  const inp=document.getElementById('stepInput');
+  if(s.type==='info'){
+    inp.innerHTML=`<div class="info-box">${s.info}</div>`;
+  }else if(s.type==='radio'){
+    inp.innerHTML='<div class="radio-group">'+s.opts.map((o,i)=>`<label class="radio-opt" id="ro${i}"><input type="radio" name="ropt" value="${o}" onchange="selectRadio(${i})"><span>${o}</span></label>`).join('')+'</div>';
+    const saved=curData['q'+curStep];if(saved){const idx=s.opts.indexOf(saved);if(idx>=0)selectRadio(idx,true);}
+  }else if(s.type==='text2'){
+    const saved=(curData['q'+curStep]||' ||| ').split(' ||| ');
+    inp.innerHTML=`<div class="input-label">${s.labels[0]}</div><textarea rows="3" id="ta2a">${saved[0]||''}</textarea><div class="input-label">${s.labels[1]}</div><textarea rows="3" id="ta2b">${saved[1]||''}</textarea>`;
+  }else{
+    const tipHtml=s.tip?`<div class="tip-box"><i class="ti ti-bulb" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>${s.tip}</div>`:'';
+    inp.innerHTML=`<textarea rows="4" id="stepTa">${curData['q'+curStep]||''}</textarea>${tipHtml}`;
+    setTimeout(()=>{const t=document.getElementById('stepTa');if(t)t.focus();},50);
+  }
+  const isLast=curStep===steps.length-1;
+  document.getElementById('nextBtn').textContent=isLast?(formMeta[curForm].review?'確認・編集する':'保存する'):'次へ';
+  const prevBtn=document.getElementById('prevBtn');
+  const nav=document.getElementById('formNav');
+  if(curStep>0){prevBtn.style.display='block';nav.classList.add('has-prev');}
+  else{prevBtn.style.display='none';nav.classList.remove('has-prev');}
+}
+
+function selectRadio(idx,silent){
+  document.querySelectorAll('.radio-opt').forEach((el,i)=>el.classList.toggle('selected',i===idx));
+  if(!silent){const r=document.querySelector(`#ro${idx} input`);if(r)r.checked=true;}
+}
+
+function getCurrentValue(){
+  const s=formMeta[curForm].steps[curStep];
+  if(s.type==='info')return '';
+  if(s.type==='radio'){const r=document.querySelector('input[name=ropt]:checked');return r?r.value:'';}
+  if(s.type==='text2'){const a=document.getElementById('ta2a'),b=document.getElementById('ta2b');return (a?a.value.trim():'')+' ||| '+(b?b.value.trim():'');}
+  const t=document.getElementById('stepTa');return t?t.value.trim():'';
+}
+
+function prevStep(){
+  curData['q'+curStep]=getCurrentValue();
+  if(curStep>0){curStep--;renderStep();}
+}
+
+function nextStep(){
+  curData['q'+curStep]=getCurrentValue();
+  const steps=formMeta[curForm].steps;
+  if(curStep<steps.length-1){curStep++;renderStep();}
+  else if(formMeta[curForm].review){showReview();}
+  else{saveRecord();}
+}
+
+function showReview(){
+  const steps=formMeta[curForm].steps;
+  const inputSteps=steps.filter(s=>s.type!=='info');
+  let html='';
+  inputSteps.forEach(s=>{
+    const idx=steps.indexOf(s),val=curData['q'+idx]||'';
+    if(s.type==='text2'){const parts=val.split(' ||| ');html+=`<div class="review-block"><div class="review-block-label">${s.q}</div><div class="review-block-subq">${s.subq}</div><div class="review-sub-label">${s.labels[0]}</div><textarea rows="2" onchange="updateReview2(this,${idx},0)">${parts[0]||''}</textarea><div class="review-sub-label">${s.labels[1]}</div><textarea rows="2" onchange="updateReview2(this,${idx},1)">${parts[1]||''}</textarea></div>`;}
+    else if(s.type==='radio'){html+=`<div class="review-block"><div class="review-block-label">${s.q}</div><div class="review-block-subq">${s.subq}</div><div class="radio-group">${s.opts.map((o,i)=>`<label class="radio-opt${val===o?' selected':''}" id="rr${idx}_${i}"><input type="radio" name="rr${idx}" value="${o}" ${val===o?'checked':''} onchange="curData['q${idx}']=this.value"><span>${o}</span></label>`).join('')}</div></div>`;}
+    else{html+=`<div class="review-block"><div class="review-block-label">${s.q}</div><div class="review-block-subq">${s.subq}</div><textarea rows="2" onchange="curData['q${idx}']=this.value">${val}</textarea></div>`;}
+  });
+  document.getElementById('reviewBlocks').innerHTML=html;
+  const idealStep=steps.find(s=>s.q==='目標・理想の状態');
+  const idealIdx=idealStep?steps.indexOf(idealStep):-1;
+  document.getElementById('idealDisplay').textContent=idealIdx>=0?(curData['q'+idealIdx]||'（未入力）'):'';
+  document.getElementById('firstStepTa').value=curData['firstStep']||'';
+  navStack.push('form');showScreen('review',false);
+}
+
+function updateReview2(el,idx,part){
+  const parts=(curData['q'+idx]||' ||| ').split(' ||| ');parts[part]=el.value;curData['q'+idx]=parts.join(' ||| ');
+}
+function saveFromReview(){curData['firstStep']=document.getElementById('firstStepTa').value.trim();saveRecord();}
+
+function saveRecord(){
+  const meta=formMeta[curForm],title=curData[meta.titleKey]||'無題';
+  const recs=JSON.parse(localStorage.getItem('shida_records')||'[]');
+  const isEdit=!!editId;
+  if(isEdit){const i=recs.findIndex(r=>r.id===editId);if(i>=0)recs[i]={...recs[i],title:title.slice(0,40),data:{...curData}};}
+  else{recs.unshift({id:Date.now(),type:curForm,typeName:meta.name,title:title.slice(0,40),data:{...curData},date:new Date().toLocaleDateString('ja-JP')});}
+  localStorage.setItem('shida_records',JSON.stringify(recs));
+  editId=null;navStack=[];
+  document.getElementById('successTitle').textContent=isEdit?'更新しました':'記録しました';
+  document.getElementById('successSub').textContent=`「${title.slice(0,40)}」を${isEdit?'更新':'記録'}しました。`;
+  showScreen('success',false);
+}
+
+function renderGrowth(){
+  const recs=JSON.parse(localStorage.getItem('shida_records')||'[]');
+  const el=document.getElementById('growthList');
+  if(!recs.length){el.innerHTML='<div class="empty"><i class="ti ti-leaf" style="font-size:32px;display:block;margin-bottom:8px"></i>まだ記録がありません。<br>最初のワークを始めましょう。</div>';return;}
+  el.innerHTML=recs.map(r=>`<div class="growth-item" onclick="showDetail(${r.id})"><div class="growth-item-type">${r.typeName}</div><div class="growth-item-title">${r.title}</div><div class="growth-item-date">${r.date}</div></div>`).join('');
+}
+
+function showDetail(id){
+  const recs=JSON.parse(localStorage.getItem('shida_records')||'[]');
+  const rec=recs.find(r=>r.id===id);if(!rec)return;
+  viewingId=id;
+  const steps=formMeta[rec.type].steps;
+  const inputSteps=steps.filter(s=>s.type!=='info');
+  let rows=inputSteps.map(s=>{
+    const idx=steps.indexOf(s);let ans=rec.data['q'+idx]||'—';
+    if(s.type==='text2'){const p=ans.split(' ||| ');ans=`<span style="font-size:11px;color:#888">${s.labels[0]}</span>\n${p[0]||'—'}\n\n<span style="font-size:11px;color:#888">${s.labels[1]}</span>\n${p[1]||'—'}`;}
+    return `<div class="detail-q">${s.q}</div><div class="detail-a">${ans}</div>`;
+  }).join('');
+  if(rec.data.firstStep){rows+=`<div class="detail-q">最初の一歩</div><div class="detail-a">${rec.data.firstStep}</div>`;}
+  document.getElementById('detailContent').innerHTML=`<div style="font-size:11px;color:#2d7a4f;font-weight:500;margin-bottom:4px">${rec.typeName}</div><div style="font-size:16px;font-weight:500;margin-bottom:2px">${rec.title}</div><div style="font-size:12px;color:#888;margin-bottom:12px">${rec.date}</div><div class="detail-section">${rows}</div>`;
+  navStack.push('growth');showScreen('detail',false);
+  document.getElementById('headerTitle').textContent='記録詳細';
+}
+
+function editRecord(){
+  const recs=JSON.parse(localStorage.getItem('shida_records')||'[]');
+  const rec=recs.find(r=>r.id===viewingId);if(!rec)return;
+  startForm(rec.type,rec.data,rec.id);
+}
+
+init();
+</script>
+</body>
+</html>
