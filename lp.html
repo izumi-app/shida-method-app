@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>目標設定・問題解決アプリ</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Yu Gothic UI',sans-serif;background:#fff;color:#1a1a1a;line-height:1.7}
+a{text-decoration:none;color:inherit}
+
+/* ヒーロー */
+.hero{background:#2d7a4f;color:#fff;padding:64px 24px 56px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:500;margin-bottom:20px;letter-spacing:0.05em}
+.hero h1{font-size:clamp(26px,5vw,38px);font-weight:700;line-height:1.3;margin-bottom:16px}
+.hero-sub{font-size:clamp(14px,3vw,17px);color:rgba(255,255,255,0.85);max-width:560px;margin:0 auto 32px;line-height:1.8}
+.hero-btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.btn-white{background:#fff;color:#2d7a4f;border:none;border-radius:8px;padding:14px 28px;font-size:15px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.btn-white:hover{background:#f0faf4}
+.btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,0.6);border-radius:8px;padding:13px 28px;font-size:15px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.btn-outline:hover{background:rgba(255,255,255,0.1)}
+
+/* 共通 */
+.section{padding:64px 24px;max-width:720px;margin:0 auto}
+.section-badge{display:inline-flex;align-items:center;gap:6px;background:#eef4f0;color:#2d7a4f;border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;margin-bottom:16px;letter-spacing:0.05em}
+.section-title{font-size:clamp(22px,4vw,30px);font-weight:700;line-height:1.35;margin-bottom:12px}
+.section-desc{font-size:15px;color:#555;line-height:1.8;max-width:560px}
+.divider{border:none;border-top:1px solid #eee;margin:0}
+
+/* 課題セクション */
+.problem-bg{background:#f9fafb}
+.problem-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:32px}
+.problem-card{background:#fff;border:1px solid #e8f0ea;border-radius:12px;padding:20px;display:flex;gap:12px}
+.problem-icon{font-size:22px;color:#c0392b;flex-shrink:0;margin-top:2px}
+.problem-card p{font-size:14px;color:#444;line-height:1.7}
+
+/* 機能セクション */
+.feature-list{display:flex;flex-direction:column;gap:24px;margin-top:36px}
+.feature-item{display:flex;gap:20px;align-items:flex-start}
+.feature-num{width:40px;height:40px;background:#2d7a4f;color:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0}
+.feature-body h3{font-size:16px;font-weight:600;margin-bottom:4px}
+.feature-body p{font-size:14px;color:#555;line-height:1.7}
+
+/* ワーク紹介 */
+.work-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:32px}
+.work-card{background:#fff;border:1.5px solid #b8d6c2;border-radius:12px;padding:20px}
+.work-card-icon{font-size:28px;color:#2d7a4f;margin-bottom:10px}
+.work-card h3{font-size:15px;font-weight:600;margin-bottom:6px}
+.work-card p{font-size:13px;color:#666;line-height:1.6}
+
+/* 使い方 */
+.steps-bg{background:#eef4f0}
+.steps{display:flex;flex-direction:column;gap:0;margin-top:32px;position:relative}
+.step{display:flex;gap:20px;padding-bottom:28px;position:relative}
+.step:last-child{padding-bottom:0}
+.step-line{position:absolute;left:19px;top:40px;bottom:0;width:2px;background:#b8d6c2}
+.step:last-child .step-line{display:none}
+.step-dot{width:40px;height:40px;background:#2d7a4f;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:15px;flex-shrink:0;position:relative;z-index:1}
+.step-body h3{font-size:15px;font-weight:600;margin-bottom:4px;padding-top:8px}
+.step-body p{font-size:14px;color:#555;line-height:1.7}
+
+/* 特長 */
+.merit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-top:32px}
+.merit-card{background:#fff;border:1px solid #e8f0ea;border-radius:12px;padding:20px;text-align:center}
+.merit-card-icon{font-size:28px;color:#2d7a4f;margin-bottom:10px}
+.merit-card h3{font-size:14px;font-weight:600;margin-bottom:4px}
+.merit-card p{font-size:12px;color:#777;line-height:1.6}
+
+/* 声 */
+.voice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:32px}
+.voice-card{background:#fff;border:1px solid #e8f0ea;border-radius:12px;padding:20px}
+.voice-text{font-size:14px;color:#333;line-height:1.8;margin-bottom:14px}
+.voice-meta{display:flex;align-items:center;gap:10px}
+.voice-avatar{width:36px;height:36px;border-radius:50%;background:#eef4f0;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.voice-name{font-size:13px;font-weight:600}
+.voice-role{font-size:12px;color:#888}
+
+/* CTA */
+.cta{background:#2d7a4f;color:#fff;text-align:center;padding:64px 24px}
+.cta h2{font-size:clamp(22px,4vw,30px);font-weight:700;margin-bottom:12px}
+.cta p{font-size:15px;color:rgba(255,255,255,0.85);margin-bottom:32px;line-height:1.8}
+
+/* フッター */
+footer{background:#1a4a30;color:rgba(255,255,255,0.5);text-align:center;padding:24px;font-size:13px}
+</style>
+</head>
+<body>
+
+<!-- ヒーロー -->
+<div class="hero">
+  <div class="hero-badge"><i class="ti ti-leaf"></i>スポーツ選手のメンタル強化ツール</div>
+  <h1>思考を整えて、<br>目標に一直線へ。</h1>
+  <p class="hero-sub">目標設定・問題解決・振り返りの3つのワークで、選手が「自分で考え、自分で動く」力を育てます。スマホ1台で、いつでもどこでも。</p>
+  <div class="hero-btns">
+    <a class="btn-white" href="index.html"><i class="ti ti-player-play"></i>無料で使ってみる</a>
+    <a class="btn-outline" href="#works"><i class="ti ti-list"></i>機能を見る</a>
+  </div>
+</div>
+
+<!-- 課題 -->
+<div class="problem-bg">
+  <div class="section">
+    <div class="section-badge"><i class="ti ti-alert-circle"></i>よくあるお悩み</div>
+    <div class="section-title">こんなことで<br>困っていませんか？</div>
+    <div class="problem-cards">
+      <div class="problem-card">
+        <i class="ti ti-circle-x problem-icon"></i>
+        <p>「頑張れ」と言うだけでは、選手の思考は変わらない</p>
+      </div>
+      <div class="problem-card">
+        <i class="ti ti-circle-x problem-icon"></i>
+        <p>壁に当たった時に、自分で解決策を考えられない選手が多い</p>
+      </div>
+      <div class="problem-card">
+        <i class="ti ti-circle-x problem-icon"></i>
+        <p>目標を立てても、なんとなく流れてしまって継続できない</p>
+      </div>
+      <div class="problem-card">
+        <i class="ti ti-circle-x problem-icon"></i>
+        <p>振り返りをしていても、次の行動につながっていない</p>
+      </div>
+    </div>
+  </div>
+</div>
+<hr class="divider">
+
+<!-- ワーク紹介 -->
+<div id="works">
+  <div class="section">
+    <div class="section-badge"><i class="ti ti-tools"></i>3つのワーク</div>
+    <div class="section-title">選手の思考力を育てる<br>3つのワーク</div>
+    <p class="section-desc">コーチングのメソッドに基づいた質問に答えるだけ。自然と思考が深まり、次の一歩が見えてきます。</p>
+    <div class="work-grid">
+      <div class="work-card">
+        <div class="work-card-icon"><i class="ti ti-target"></i></div>
+        <h3>目標設定</h3>
+        <p>9つの質問で目標を多角的に掘り下げ、「わくわくする目標」に仕上げます。</p>
+      </div>
+      <div class="work-card">
+        <div class="work-card-icon"><i class="ti ti-puzzle"></i></div>
+        <h3>問題解決ワーク</h3>
+        <p>課題→原因→理想→リソースの流れで、壁を突破するための思考を整理します。</p>
+      </div>
+      <div class="work-card">
+        <div class="work-card-icon"><i class="ti ti-refresh"></i></div>
+        <h3>振り返り</h3>
+        <p>7つの視点で体験を「リソース（資源）」に変換。経験を次の成長につなげます。</p>
+      </div>
+      <div class="work-card">
+        <div class="work-card-icon"><i class="ti ti-chart-line"></i></div>
+        <h3>成長記録</h3>
+        <p>過去のワークを一覧表示。どれだけ考え、成長してきたかを可視化します。</p>
+      </div>
+    </div>
+  </div>
+</div>
+<hr class="divider">
+
+<!-- 使い方 -->
+<div class="steps-bg">
+  <div class="section">
+    <div class="section-badge"><i class="ti ti-route"></i>使い方</div>
+    <div class="section-title">はじめ方は<br>とてもシンプル</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-dot">1</div>
+        <div class="step-line"></div>
+        <div class="step-body">
+          <h3>URLを開く</h3>
+          <p>インストール不要。スマホのブラウザでURLを開くだけで、すぐに使えます。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-dot">2</div>
+        <div class="step-line"></div>
+        <div class="step-body">
+          <h3>目標を設定する</h3>
+          <p>「達成したら最高に嬉しい目標」を入力。これがすべてのワークの出発点になります。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-dot">3</div>
+        <div class="step-line"></div>
+        <div class="step-body">
+          <h3>ワークを選んで実践する</h3>
+          <p>目標設定・問題解決・振り返りの中から、今の自分に必要なものを選びます。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-dot">4</div>
+        <div class="step-line"></div>
+        <div class="step-body">
+          <h3>記録を残してシェアする</h3>
+          <p>ワーク完了後に記録が保存されます。監督や保護者へのシェアも1タップで完了。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr class="divider">
+
+<!-- 特長 -->
+<div class="section">
+  <div class="section-badge"><i class="ti ti-star"></i>特長</div>
+  <div class="section-title">選ばれる理由</div>
+  <div class="merit-grid">
+    <div class="merit-card">
+      <div class="merit-card-icon"><i class="ti ti-device-mobile"></i></div>
+      <h3>スマホで完結</h3>
+      <p>インストール不要。URLを開くだけで使えます。</p>
+    </div>
+    <div class="merit-card">
+      <div class="merit-card-icon"><i class="ti ti-lock"></i></div>
+      <h3>データは端末内</h3>
+      <p>記録はすべて端末内に保存。外部送信なし。</p>
+    </div>
+    <div class="merit-card">
+      <div class="merit-card-icon"><i class="ti ti-free-rights"></i></div>
+      <h3>完全無料</h3>
+      <p>費用は一切かかりません。</p>
+    </div>
+    <div class="merit-card">
+      <div class="merit-card-icon"><i class="ti ti-share"></i></div>
+      <h3>シェア機能</h3>
+      <p>LINEやメールで記録を簡単に共有できます。</p>
+    </div>
+    <div class="merit-card">
+      <div class="merit-card-icon"><i class="ti ti-book-2"></i></div>
+      <h3>学習コンテンツ</h3>
+      <p>メンタルトレーニングや監督メッセージも配信。</p>
+    </div>
+    <div class="merit-card">
+      <div class="merit-card-icon"><i class="ti ti-pencil"></i></div>
+      <h3>いつでも編集</h3>
+      <p>記録はあとから見直し・編集が可能です。</p>
+    </div>
+  </div>
+</div>
+<hr class="divider">
+
+<!-- 声 -->
+<div class="problem-bg">
+  <div class="section">
+    <div class="section-badge"><i class="ti ti-message-circle"></i>テスターの声</div>
+    <div class="section-title">使ってみた感想</div>
+    <div class="voice-grid">
+      <div class="voice-card">
+        <p class="voice-text">「質問に答えるだけで、自分でも気づいていなかった本当の目標が見えてきた。」</p>
+        <div class="voice-meta">
+          <div class="voice-avatar"><i class="ti ti-user"></i></div>
+          <div>
+            <div class="voice-name">Aさん（大学2年）</div>
+            <div class="voice-role">運動部所属</div>
+          </div>
+        </div>
+      </div>
+      <div class="voice-card">
+        <p class="voice-text">「問題解決ワークを試合後に使ったら、次の練習で何をすべきか明確になった。」</p>
+        <div class="voice-meta">
+          <div class="voice-avatar"><i class="ti ti-user"></i></div>
+          <div>
+            <div class="voice-name">Bさん（大学3年）</div>
+            <div class="voice-role">運動部所属</div>
+          </div>
+        </div>
+      </div>
+      <div class="voice-card">
+        <p class="voice-text">「シェア機能があるので、選手の思考の変化を把握しやすくなった。」</p>
+        <div class="voice-meta">
+          <div class="voice-avatar"><i class="ti ti-user"></i></div>
+          <div>
+            <div class="voice-name">Cさん</div>
+            <div class="voice-role">指導者</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta">
+  <h2>まずは、無料で試してみてください。</h2>
+  <p>インストール不要。URLを開くだけで、今すぐ使えます。</p>
+  <a class="btn-white" href="index.html"><i class="ti ti-player-play"></i>アプリを開く（無料）</a>
+</div>
+
+<footer>
+  &copy; 2026 目標設定・問題解決アプリ
+</footer>
+
+</body>
+</html>
