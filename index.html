@@ -42,6 +42,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .step-subq{font-size:14px;color:#555;line-height:1.6;margin-bottom:8px;white-space:pre-line}
 textarea{width:100%;border:1px solid #c8dace;border-radius:8px;padding:10px 12px;font-size:14px;font-family:inherit;color:#1a1a1a;background:#fff;line-height:1.6;resize:none}
 textarea:focus{outline:none;border-color:#2d7a4f;box-shadow:0 0 0 2px rgba(45,122,79,0.15)}
+textarea{overflow:hidden}
 .input-label{font-size:12px;font-weight:500;color:#666;margin-bottom:4px;margin-top:10px}
 .input-label:first-child{margin-top:0}
 .radio-group{display:flex;flex-direction:column;gap:8px}
@@ -82,6 +83,21 @@ textarea:focus{outline:none;border-color:#2d7a4f;box-shadow:0 0 0 2px rgba(45,12
 .review-sub-label{font-size:11px;font-weight:500;color:#666;margin-top:6px;margin-bottom:2px}
 .ideal-box{background:rgba(45,122,79,0.08);border:1.5px solid #b8d6c2;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
 .ideal-box-title{font-size:14px;font-weight:500;color:#1a5c35}
+
+/* ── 成長記録タブ ── */
+.growth-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.growth-tab{background:#fff;border:1.5px solid #b8d6c2;border-radius:20px;padding:6px 14px;font-size:13px;font-weight:500;cursor:pointer;color:#555;transition:all 0.15s}
+.growth-tab.active{background:#2d7a4f;border-color:#2d7a4f;color:#fff}
+
+/* ── SCOREステート切り替え ── */
+#app,body{transition:background 0.4s}
+.header{transition:background 0.4s}
+.score-map{display:flex;gap:7px;overflow-x:auto;padding:4px 0 8px;scrollbar-width:none}
+.score-map::-webkit-scrollbar{display:none}
+.score-note{flex-shrink:0;border-radius:8px;padding:8px 10px;font-size:12px;font-weight:600;cursor:pointer;border:2px solid transparent;text-align:center;min-width:58px;line-height:1.3;transition:transform 0.15s,border-color 0.15s}
+.score-note:hover{transform:translateY(-2px)}
+.score-note.active{border-color:rgba(0,0,0,0.25);transform:translateY(-3px);box-shadow:0 3px 8px rgba(0,0,0,0.12)}
+.score-note-num{font-size:10px;opacity:0.7;margin-bottom:2px}
 
 /* ── 学習・情報提供リンクセクション ── */
 .info-section{background:#fff;border:1.5px solid #b8d6c2;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
@@ -179,7 +195,7 @@ textarea:focus{outline:none;border-color:#2d7a4f;box-shadow:0 0 0 2px rgba(45,12
 
   <!-- 目標編集画面 -->
   <div class="screen" id="screen-asif-edit">
-    <div style="font-size:14px;color:#555;line-height:1.6">「もし、すでに達成しているとしたら？」とイメージしながら、目標や気持ちが変わったら更新しましょう。</div>
+    <div style="font-size:14px;color:#555;line-height:1.6">「もし、すでに達成しているとしたら？」と達成した場面を臨場感たっぷりにイメージして、その気持ちを充分に味わいましょう。</div>
     <div class="asif-example">例：秋季リーグ戦優勝！めちゃくちゃ嬉しい！</div>
     <div>
       <div class="input-label">もし目標を達成したら？＋どんないい気持ちがする？</div>
@@ -190,6 +206,7 @@ textarea:focus{outline:none;border-color:#2d7a4f;box-shadow:0 0 0 2px rgba(45,12
 
   <!-- フォーム画面 -->
   <div class="screen" id="screen-form" style="padding-top:12px">
+    <div id="scoreMap" class="score-map" style="display:none"></div>
     <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
     <div class="step-label" id="stepLabel"></div>
     <div class="step-q" id="stepQ"></div>
@@ -231,6 +248,12 @@ textarea:focus{outline:none;border-color:#2d7a4f;box-shadow:0 0 0 2px rgba(45,12
   <!-- 成長記録画面 -->
   <div class="screen" id="screen-growth">
     <div class="section-title">成長記録</div>
+    <div class="growth-tabs">
+      <button class="growth-tab active" onclick="switchGrowthTab('all')">すべて</button>
+      <button class="growth-tab" onclick="switchGrowthTab('wfo')">目標設定</button>
+      <button class="growth-tab" onclick="switchGrowthTab('score')">問題解決</button>
+      <button class="growth-tab" onclick="switchGrowthTab('reflect')">振り返り</button>
+    </div>
     <div id="growthList"></div>
   </div>
 
@@ -277,7 +300,7 @@ const reflectSteps=[
   {q:'あなたが振り返ることで、リソースとしたいことは、何ですか？',subq:'振り返る出来事・テーマ',type:'text'},
   {q:'この体験を振り返って、あなたが得た「発見」や「気づき」、「学び」のいくつかには、どのようなものがあるでしょうか？',subq:'もし、ぴったりの答えが浮かばないときには、「もし、そうだとしたら？」と仮で答えてみましょう。',type:'text'},
   {q:'この経験を通して、あなたの中に広がった、これまでとは違う新しい「アイデア」や「可能性」、「選択肢」のいくつかには、どのようなものがあるでしょうか？',subq:'',type:'text'},
-  {q:'あなたが行った行動で、目的地にどれくらい近づいたでしょうか。',subq:'自分が試したことは、効果的だったか？',type:'text'},
+  {q:'あなたが行った行動の結果、どれくらい目的地に近づいたでしょうか。あるいは、遠ざかったのでしょうか。',subq:'あなたが自分で試したことは、どのくらい効果的だったか？',type:'text'},
   {q:'この経験を、もう一度体験できるとしたら、さらに改善・発展させるために、何を調整し、付け加えたいでしょうか？',subq:'よりよくなるための、違いを創ろう',type:'text',tip:'その行動を、イメージの中で、実際にやってみましょう！\n身体を使って再現してみるのもおすすめです。'},
   {q:'この経験を土台として、あなたが自分自身の可能性と未来を拡大するために実行できる、次の一歩のいくつかには、どのようなものがあるでしょうか？',subq:'',type:'text'},
   {q:'これらのことは、この先の数日間、数週間、数ヶ月間、あなたとあなたの周りの人たちに、どのようにいい影響をもたらしてくれるでしょうか？',subq:'',type:'text'},
@@ -327,7 +350,7 @@ function showScreen(id,push=true){
   if(id!=='detail'){const dc=document.getElementById('deleteConfirm');if(dc)dc.classList.remove('show');}
 }
 
-document.getElementById('backBtn').onclick=()=>showScreen(navStack.pop()||'home',false);
+document.getElementById('backBtn').onclick=()=>{resetTheme();document.getElementById('scoreMap').style.display='none';showScreen(navStack.pop()||'home',false);};
 
 function toggleDeleteConfirm(){document.getElementById('deleteConfirm').classList.toggle('show');}
 function confirmDelete(){
@@ -336,10 +359,54 @@ function confirmDelete(){
   viewingId=null;navStack=[];showScreen('growth',false);
 }
 
+/* ── SCOREテーマ定義 ── */
+const scoreThemes=[
+  null, // index 0: セットアップ（デフォルト色）
+  {bg:'#eef4f0',header:'#2d7a4f',note:'#c8e6d4',text:'#1a4a30',label:'現状'},
+  {bg:'#e8f2fc',header:'#1a6fa8',note:'#b3d4f0',text:'#0d3f66',label:'原因'},
+  {bg:'#fdf8e8',header:'#8a6f00',note:'#f0dc8c',text:'#5a4800',label:'理想'},
+  {bg:'#fef0f5',header:'#b5306a',note:'#f5b8d4',text:'#7a1a45',label:'リソース'},
+  {bg:'#fff0e8',header:'#c55a0a',note:'#ffd0b0',text:'#7a3200',label:'影響'},
+];
+
+function applyScoreTheme(stepIdx){
+  const t=scoreThemes[stepIdx]||{bg:'#eef4f0',header:'#2d7a4f'};
+  document.getElementById('app').style.background=t.bg;
+  document.body.style.background=t.bg;
+  document.querySelector('.header').style.background=t.header;
+}
+
+function resetTheme(){
+  document.getElementById('app').style.background='';
+  document.body.style.background='';
+  document.querySelector('.header').style.background='';
+}
+
+function renderScoreMap(activeStep){
+  const map=document.getElementById('scoreMap');
+  map.style.display='flex';
+  map.innerHTML=scoreThemes.slice(1).map((t,i)=>{
+    const idx=i+1;
+    const isActive=idx===activeStep;
+    return `<div class="score-note${isActive?' active':''}" style="background:${t.note};color:${t.text}" onclick="jumpToScoreStep(${idx})"><div class="score-note-num">${idx}</div>${t.label}</div>`;
+  }).join('');
+}
+
+function jumpToScoreStep(idx){
+  curData['q'+curStep]=getCurrentValue();
+  curStep=idx;
+  renderStep();
+}
+
+function vibrate(){
+  if(navigator.vibrate)navigator.vibrate(120);
+}
+
 function startForm(type,preData,existingId){
   curForm=type;curStep=0;curData=preData?{...preData}:{};editId=existingId||null;
   navStack.push(curScreen);showScreen('form',false);
   document.getElementById('headerTitle').textContent=formMeta[type].name+(editId?' (編集)':'');
+  if(type!=='score'){resetTheme();document.getElementById('scoreMap').style.display='none';}
   renderStep();
 }
 
@@ -347,6 +414,11 @@ function renderStep(){
   const steps=formMeta[curForm].steps,s=steps[curStep];
   const inputSteps=steps.filter(x=>x.type!=='info');
   const doneInput=steps.slice(0,curStep).filter(x=>x.type!=='info').length;
+  if(curForm==='score'){
+    applyScoreTheme(curStep);
+    if(curStep>0){renderScoreMap(curStep);}
+    else{document.getElementById('scoreMap').style.display='none';}
+  }
   document.getElementById('progressFill').style.width=Math.round((doneInput/inputSteps.length)*100)+'%';
   document.getElementById('stepLabel').textContent=s.type==='info'?'はじめに':`ステップ ${doneInput+1} / ${inputSteps.length}`;
   document.getElementById('stepQ').textContent=s.q;
@@ -388,15 +460,15 @@ function getCurrentValue(){
 
 function prevStep(){
   curData['q'+curStep]=getCurrentValue();
-  if(curStep>0){curStep--;renderStep();}
+  if(curStep>0){vibrate();curStep--;renderStep();}
 }
 
 function nextStep(){
   curData['q'+curStep]=getCurrentValue();
   const steps=formMeta[curForm].steps;
-  if(curStep<steps.length-1){curStep++;renderStep();}
-  else if(formMeta[curForm].review){showReview();}
-  else{saveRecord();}
+  if(curStep<steps.length-1){vibrate();curStep++;renderStep();}
+  else if(formMeta[curForm].review){resetTheme();showReview();}
+  else{resetTheme();saveRecord();}
 }
 
 function showReview(){
@@ -415,6 +487,7 @@ function showReview(){
   document.getElementById('idealDisplay').textContent=idealIdx>=0?(curData['q'+idealIdx]||'（未入力）'):'';
   document.getElementById('firstStepTa').value=curData['firstStep']||'';
   navStack.push('form');showScreen('review',false);
+  document.querySelectorAll('#screen-review textarea').forEach(t=>{t.style.height='auto';t.style.height=t.scrollHeight+'px';});
 }
 
 function updateReview2(el,idx,part){
@@ -442,10 +515,24 @@ function saveRecord(){
   showScreen('success',false);
 }
 
+let curGrowthTab='all';
+
+function switchGrowthTab(type){
+  curGrowthTab=type;
+  document.querySelectorAll('.growth-tab').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderGrowth();
+}
+
 function renderGrowth(){
-  const recs=JSON.parse(localStorage.getItem('shida_records')||'[]');
+  let recs=JSON.parse(localStorage.getItem('shida_records')||'[]');
+  if(curGrowthTab!=='all')recs=recs.filter(r=>r.type===curGrowthTab);
   const el=document.getElementById('growthList');
-  if(!recs.length){el.innerHTML='<div class="empty"><i class="ti ti-leaf" style="font-size:32px;display:block;margin-bottom:8px"></i>まだ記録がありません。<br>最初のワークを始めましょう。</div>';return;}
+  if(!recs.length){
+    const msg=curGrowthTab==='all'?'まだ記録がありません。<br>最初のワークを始めましょう。':'この種類の記録はまだありません。';
+    el.innerHTML=`<div class="empty"><i class="ti ti-leaf" style="font-size:32px;display:block;margin-bottom:8px"></i>${msg}</div>`;
+    return;
+  }
   el.innerHTML=recs.map(r=>`<div class="growth-item" onclick="showDetail(${r.id})"><div class="growth-item-type">${r.typeName}</div><div class="growth-item-title">${r.title}</div><div class="growth-item-date">${r.date}</div></div>`).join('');
 }
 
@@ -526,6 +613,13 @@ function shareCurrentRecord(){
 }
 
 init();
+
+document.addEventListener('input',e=>{
+  if(e.target.tagName==='TEXTAREA'){
+    e.target.style.height='auto';
+    e.target.style.height=e.target.scrollHeight+'px';
+  }
+});
 </script>
 </body>
 </html>
