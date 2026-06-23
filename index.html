@@ -84,6 +84,12 @@ textarea{overflow:hidden}
 .ideal-box{background:rgba(45,122,79,0.08);border:1.5px solid #b8d6c2;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
 .ideal-box-title{font-size:14px;font-weight:500;color:#1a5c35}
 
+/* ── CSVエクスポート ── */
+.export-area{margin-top:8px;padding:14px;background:#fff;border:1.5px solid #b8d6c2;border-radius:12px;display:flex;flex-direction:column;gap:10px}
+.export-desc{font-size:13px;color:#666;line-height:1.6}
+.btn-export{background:#fff;color:#2d7a4f;border:1.5px solid #2d7a4f;border-radius:8px;padding:12px 16px;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;width:100%}
+.btn-export:hover{background:#f0faf4}
+
 /* ── 成長記録タブ ── */
 .growth-tabs{display:flex;gap:6px;flex-wrap:wrap}
 .growth-tab{background:#fff;border:1.5px solid #b8d6c2;border-radius:20px;padding:6px 14px;font-size:13px;font-weight:500;cursor:pointer;color:#555;transition:all 0.15s}
@@ -255,6 +261,12 @@ textarea{overflow:hidden}
       <button class="growth-tab" onclick="switchGrowthTab('reflect')">振り返り</button>
     </div>
     <div id="growthList"></div>
+    <div class="export-area">
+      <div class="export-desc">記録をCSVファイルで書き出します。種類ごとに3つのファイルが保存されます。</div>
+      <button class="btn-export" onclick="exportAllCSV()">
+        <i class="ti ti-download"></i>データをCSVで書き出す
+      </button>
+    </div>
   </div>
 
   <!-- 記録詳細画面 -->
@@ -613,6 +625,72 @@ function shareCurrentRecord(){
 }
 
 init();
+
+/* ── CSVエクスポート ── */
+function csvEscape(v){
+  if(v==null)return '""';
+  const s=String(v).replace(/"/g,'""');
+  return `"${s}"`;
+}
+
+function downloadCSV(filename,rows){
+  const bom='﻿';
+  const content=bom+rows.map(r=>r.map(csvEscape).join(',')).join('\n');
+  const blob=new Blob([content],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=filename;a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function exportAllCSV(){
+  const recs=JSON.parse(localStorage.getItem('shida_records')||'[]');
+  if(!recs.length){alert('記録がありません。');return;}
+  const date=new Date().toLocaleDateString('ja-JP').replace(/\//g,'-');
+
+  const types=[
+    {key:'wfo', name:'目標設定', steps:wfoSteps},
+    {key:'score', name:'問題解決ワーク', steps:scoreSteps},
+    {key:'reflect', name:'振り返り', steps:reflectSteps},
+  ];
+
+  types.forEach(({key,name,steps})=>{
+    const filtered=recs.filter(r=>r.type===key).slice().reverse();
+    if(!filtered.length)return;
+
+    const inputSteps=steps.filter(s=>s.type!=='info');
+    const headers=['日付','タイトル'];
+    inputSteps.forEach(s=>{
+      if(s.type==='text2'){
+        headers.push(s.q+'（'+s.labels[0]+'）');
+        headers.push(s.q+'（'+s.labels[1]+'）');
+      }else{
+        headers.push(s.q);
+      }
+    });
+    if(key==='score')headers.push('最初の一歩');
+
+    const rows=[headers];
+    filtered.forEach(rec=>{
+      const row=[rec.date, rec.title||''];
+      inputSteps.forEach(s=>{
+        const idx=steps.indexOf(s);
+        const val=rec.data['q'+idx]||'';
+        if(s.type==='text2'){
+          const parts=val.split(' ||| ');
+          row.push(parts[0]||'');
+          row.push(parts[1]||'');
+        }else{
+          row.push(val);
+        }
+      });
+      if(key==='score')row.push(rec.data.firstStep||'');
+      rows.push(row);
+    });
+
+    setTimeout(()=>downloadCSV(`${name}_${date}.csv`,rows), types.findIndex(t=>t.key===key)*300);
+  });
+}
 
 document.addEventListener('input',e=>{
   if(e.target.tagName==='TEXTAREA'){
